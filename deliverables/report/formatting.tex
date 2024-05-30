@@ -1,0 +1,83 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[italian]{babel}
+\addto\captionsenglish{
+  \renewcommand{\contentsname}%
+    {Indice}%
+}
+\usepackage{setspace}
+\usepackage{datetime}
+\usepackage{mathptmx}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[top=2.5cm, left=2.5cm, bottom=2.5cm, right=2.5cm]{geometry} % sets the margins
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{url} % fixes url problem
+\usepackage{csquotes}% Recommended
+\usepackage{natbib}
+\usepackage{indentfirst}
+\usepackage[colorlinks = true, linkcolor = black, citecolor=black, urlcolor=black, filecolor = black, bookmarks=false,hypertexnames=true]{hyperref} 
+\bibpunct{\textcolor{black}{[}}{\textcolor{black}{]}}{;}{a}{}{,}
+
+% Set the length of the indentation of the first line of each paragraph (0 if you don't want the first lines to be indented)
+\setlength{\parindent}{0.5cm}
+% Tip: if you want that only specific paragraphs are not indented, wrap them in command \noindent{}
+
+%%\setmainfont{Times New Roman}
+\onehalfspacing
+\linespread{1.25}
+
+
+% MyCommands
+\newcommand{\CourseNumberAndName}{\CourseNumber \ - \CourseName}
+\newcommand{\YourNameAndNumber}{\YourName \ - \YourStudNumber}
+\newcommand{\WriteResponsible}{Responsible: \Responsible}
+\newcommand{\WriteExaminers}{Examiners: \Examiners}
+
+
+\begin{document}
+\centering\includegraphics[width=5cm]{images/Logo_Politecnico_Milano.png}
+\begin{flushleft}
+% University logo
+
+
+% 
+\textbf{Politecnico di Milano}\\
+Dipartimento di Ingegneria Industriale e dell'Informazione\\
+Corso di Laurea in Ingegneria Informatica\\
+Prof. Fabio Salice\\
+Anno Accademico 2023/2024 \\
+\end{flushleft}
+
+\begin{center}
+\vfill
+\Large
+\textbf{Relazione Prova Finale di Reti Logiche}\\
+\textit{Progettazione e sintesi di un dispositivo programmabile}\\
+\vfill
+\end{center}
+
+\begin{flushright}
+
+
+Emanuele Minotti - 10764444 \\
+Filippo Morelli - 10799749 \\
+\end{flushright}
+\thispagestyle{empty}
+\titlepage
+\pagenumbering{gobble}
+\tableofcontents
+
+% Comment the lines below if you don't want list of Figures and/or list of Tables
+%\listoffigures
+%\listoftables
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{body}
+
+\clearpage
+\thispagestyle{empty}
+
+\end{document}
