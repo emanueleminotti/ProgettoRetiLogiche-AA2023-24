@@ -1,0 +1,56 @@
+\section{Introduzione}
+% rielaborazione ed interpretazione della specifica
+% interfaccia componente
+
+\section{Architettura}
+\subsection{Segnali interni}
+% breve descrivione di tutti i signal usati
+\subsection{Moduli}
+% schema a blocchi componente
+% presentazione dei process
+\subsubsection{Address counter}
+\subsubsection{Word counter}
+\subsubsection{Credibility counter}
+\subsubsection{Data register}
+\subsubsection{Multiplexer}
+\subsubsection{Address counter}
+\subsubsection{Macchina a stati}
+% diagramma macchina a stati finiti
+% descrizione degli stati
+
+\section{Risultati sperimentali}
+\subsection{Sintesi}
+% report utilization
+\begin{verbatim}
+    +-------------------------+------+-------+------------+-----------+-------+
+    |        Site Type        | Used | Fixed | Prohibited | Available | Util% |
+    +-------------------------+------+-------+------------+-----------+-------+
+    | Slice LUTs*             |   63 |     0 |          0 |     78600 |  0.08 |
+    |   LUT as Logic          |   63 |     0 |          0 |     78600 |  0.08 |
+    |   LUT as Memory         |    0 |     0 |          0 |     26600 |  0.00 |
+    | Slice Registers         |   57 |     0 |          0 |    157200 |  0.04 |
+    |   Register as Flip Flop |   57 |     0 |          0 |    157200 |  0.04 |
+    |   Register as Latch     |    0 |     0 |          0 |    157200 |  0.00 |
+    | F7 Muxes                |    0 |     0 |          0 |     39300 |  0.00 |
+    | F8 Muxes                |    0 |     0 |          0 |     19650 |  0.00 |
+    +-------------------------+------+-------+------------+-----------+-------+    
+\end{verbatim}
+% report timing
+\begin{verbatim}
+Slack (MET) :       17.369ns  (required time - arrival time)
+  Source:           current_data_reg[3]/C
+                      (rising edge-triggered cell FDCE clocked by clock  
+                        {rise@0.000ns fall@5.000ns period=20.000ns})
+  Destination:      credibility_reg[0]/CE
+                      (rising edge-triggered cell FDPE clocked by clock  
+                        {rise@0.000ns fall@5.000ns period=20.000ns})
+  Path Group:       clock
+  Path Type:        Setup (Max at Slow Process Corner)
+  Requirement:      20.000ns  (clock rise@20.000ns - clock rise@0.000ns)
+  Data Path Delay:  2.210ns  (logic 0.540ns (24.434%)  route 1.670ns (75.566%))
+  Logic Levels:     3  (LUT4=1 LUT5=1 LUT6=1)
+\end{verbatim}
+\subsection{Simulazioni}
+\subsubsection{Test bench i}
+
+\section{Conclusioni}
