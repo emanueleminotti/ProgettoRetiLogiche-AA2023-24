@@ -1,6 +1,10 @@
 \section{Introduzione}
 % rielaborazione ed interpretazione della specifica
-% interfaccia componente
+
+\begin{figure}[!htb]
+  \centering\includegraphics[width = 15cm]{images/interfaccia_componente.pdf}
+  \caption{Interfaccia del componente}
+\end{figure}
 
 \section{Architettura}
 \subsection{Segnali interni}
@@ -13,14 +17,13 @@
 \subsubsection{Credibility counter}
 \subsubsection{Data register}
 \subsubsection{Multiplexer}
-\subsubsection{Address counter}
 \subsubsection{Macchina a stati}
 % diagramma macchina a stati finiti
 % descrizione degli stati
 
 \section{Risultati sperimentali}
 \subsection{Sintesi}
-% report utilization
+\subsubsection{Report utilization}
 \begin{verbatim}
     +-------------------------+------+-------+------------+-----------+-------+
     |        Site Type        | Used | Fixed | Prohibited | Available | Util% |
@@ -35,7 +38,7 @@
     | F8 Muxes                |    0 |     0 |          0 |     19650 |  0.00 |
     +-------------------------+------+-------+------------+-----------+-------+    
 \end{verbatim}
-% report timing
+\subsubsection{Report timing}
 \begin{verbatim}
 Slack (MET) :       17.369ns  (required time - arrival time)
   Source:           current_data_reg[3]/C
