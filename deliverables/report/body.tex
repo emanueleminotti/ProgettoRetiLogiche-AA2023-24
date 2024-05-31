@@ -1,6 +1,29 @@
 \section{Introduzione}
-% rielaborazione ed interpretazione della specifica
+\subsection{Descrizione generale e funzionamento}
+\begin{flushleft}
+  \par Questo progetto ha l'obiettivo di sviluppare un modulo hardware programmabile in linguaggio VHDL per leggere e processare una sequenza di dati memorizzati in celle alterne della memoria.
+  \par Il modulo inizia l'elaborazione quando riceve un segnale di avvio e un indirizzo iniziale. La sequenza da processare ha una lunghezza specificata. Il modulo legge i dati dalla memoria e sostituisce ogni zero con l'ultimo valore valido letto. Inoltre, calcola un indicatore di "credibilità" per ciascun valore, da inserire nella cella adiacente: questo indicatore inizia da 31 per ogni valore diverso da zero e diminuisce ogni volta che si incontra uno zero, senza mai scendere sotto zero. Il valore elaborato e il suo indicatore di credibilità vengono poi memorizzati nuovamente in memoria.
+  \par Se il primo valore della sequenza è zero, esso rimane tale e il valore di credibilità associato viene impostato a zero. Lo stesso accade fino al raggiungimento del primo valore diverso da zero.
+  \par L'elaborazione termina quando il modulo ha finito di aggiornare la sequenza e i relativi valori di credibilità, segnalando la fine del processo con un segnale di completamento. Il modulo si resetta e si prepara per una nuova esecuzione del processo.
+\end{flushleft}
 
+\subsection{Interfaccia del componente}
+\begin{flushleft}
+  Di seguito vengono riportati i segnali che consentono la comunicazione tra la memoria ed il componente progettato.
+\end{flushleft}
+\begin{itemize}
+  \item \textbf{{i\_clk}:} sincronizza le operazioni del componente.
+  \item \textbf{{i\_rst:}} inizializza il componente per ricevere il primo segnale di START.
+  \item \textbf{{i\_start}:} avvia l'elaborazione dei dati.
+  \item \textbf{{i\_k}:} rappresenta la lunghezza della sequenza di dati.
+  \item \textbf{{i\_add}:} rappresenta l'indirizzo di memoria da cui iniziare l'elaborazione della sequenza.
+  \item \textbf{{o\_done}:} indica al Test Bench la fine dell'elaborazione.
+  \item \textbf{{o\_mem\_addr}:} contiene l'indirizzo di memoria al quale leggere/scrivere il dato.
+  \item \textbf{{i\_mem\_data}:} contiene il dato letto all'indirizzo specificato.
+  \item \textbf{{o\_mem\_data}:} contiene il dato d scrivere all'indirizzo specificato.
+  \item \textbf{{o\_mem\_en}:} abilita la comunicazione con la memoria.
+\item \textbf{{o\_mem\_we}:} abilita la scrittura in memoria.
+\end{itemize}
 \begin{figure}[!htb]
   \centering\includegraphics[width = 15cm]{images/interfaccia_componente.pdf}
   \caption{Interfaccia del componente}
@@ -57,3 +80,8 @@ Slack (MET) :       17.369ns  (required time - arrival time)
 \subsubsection{Test bench i}
 
 \section{Conclusioni}
+\begin{flushleft}
+  \par Il progetto offre l'opportunità di sviluppare competenze nell'ambito della progettazione di hardware dedicato all'elaborazione e alla gestione efficiente dei dati. 
+  \par Attraverso questo lavoro, è stato possibile acquisire una più profonda comprensione delle metodologie e delle tecniche necessarie per implementare sistemi sincroni nel campo dell'ingegneria hardware. 
+  \par La capacità di tradurre concetti teorici in soluzioni pratiche e funzionali è un risultato significativo di questo lavoro, dimostrando la nostra preparazione nell'affrontare sfide complesse.
+\end{flushleft}
