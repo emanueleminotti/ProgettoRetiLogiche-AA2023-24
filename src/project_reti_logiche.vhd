@@ -25,7 +25,7 @@ architecture project_reti_logiche_arch of project_reti_logiche is
    ---- SEGNALI ----
 
    -- Controllo della macchina a stati finiti
-   type state_type is (RESET, SETUP, WAIT_WORD, READ_WORD, WRITE_WORD, WAIT_CREDIBILITY, WRITE_CREDIBILITY, COMPLETED);
+   type state_type is (S0, S1, S2, S3, S4, S5, S6, S7);
    signal curr_state, next_state : state_type;
    
    -- Gestione del caso particolare dato dalla specifica
@@ -34,7 +34,7 @@ architecture project_reti_logiche_arch of project_reti_logiche is
    -- Memorizza l'indirizzo corrente al quale leggere/scrivere i dati in memoria
    signal curr_addr : std_logic_vector(15 downto 0) := (others => '0');
 
-   -- Valore di credibilit  corrente
+   -- Valore di credibilità corrente
    signal credibility : std_logic_vector(4 downto 0) := (others => '1');
 
    -- Numero di parole lette dalla memoria
@@ -45,7 +45,7 @@ architecture project_reti_logiche_arch of project_reti_logiche is
    signal en_word_count : std_logic := '0';
    signal en_cred_count : std_logic := '0';
 
-   -- Reinizializzano separatamente i componenti dell'entit 
+   -- Reinizializzano separatamente i componenti dell'entità 
    signal init_addr : std_logic := '0';
    signal init_word : std_logic := '0';
    signal init_cred : std_logic := '0';
@@ -59,7 +59,7 @@ architecture project_reti_logiche_arch of project_reti_logiche is
    signal last_valid_data : std_logic_vector(7 downto 0) := (others => '0');
    signal current_data : std_logic_vector(7 downto 0) := (others => '0');
 
-   -- Indica che un nuovo valore valido   stato letto dalla memoria
+   -- Indica che un nuovo valore valido è stato letto dalla memoria
    signal new_data: std_logic := '0';
 
    -- Indica il termine della computazione
@@ -69,7 +69,7 @@ begin
 
     ---- COMPONENTI ----
 
-    -- Conta a ritroso a partire dal valore di credibilit 
+    -- Conta a ritroso a partire dal valore di credibilità
     credibility_counter: process(i_rst, i_clk)
     begin
         if (i_rst = '1') then
@@ -144,7 +144,7 @@ begin
     fsm_state_reg: process(i_rst, i_clk)
     begin
         if (i_rst = '1') then
-            curr_state <= RESET;
+            curr_state <= S0;
         elsif (rising_edge(i_clk)) then
             curr_state <= next_state;
         end if;
@@ -154,37 +154,37 @@ begin
     fsm_lambda: process(i_rst, i_start, done_processing, curr_state)
     begin
         case curr_state is
-            when RESET =>
+            when S0 =>
                 if (i_rst = '0') then
-                    next_state <= SETUP;
+                    next_state <= S1;
                 else
-                    next_state <= RESET;
+                    next_state <= S0;
                 end if;
-            when SETUP =>
+            when S1 =>
                 if (i_start = '1') then
-                    next_state <= WAIT_WORD;
+                    next_state <= S2;
                 else
-                    next_state <= SETUP;
+                    next_state <= S1;
                 end if;
-            when WAIT_WORD =>
+            when S2 =>
                 if (done_processing = '1') then
-                    next_state <= COMPLETED;
+                    next_state <= S7;
                 else
-                    next_state <= READ_WORD;
+                    next_state <= S3;
                 end if;
-            when READ_WORD =>
-                next_state <= WRITE_WORD;
-            when WRITE_WORD =>
-                next_state <= WAIT_CREDIBILITY;
-            when WAIT_CREDIBILITY =>
-                next_state <= WRITE_CREDIBILITY;
-            when WRITE_CREDIBILITY =>
-                next_state <= WAIT_WORD;
-            when COMPLETED =>
+            when S3 =>
+                next_state <= S4;
+            when S4 =>
+                next_state <= S5;
+            when S5 =>
+                next_state <= S6;
+            when S6 =>
+                next_state <= S2;
+            when S7 =>
                 if (i_start = '0') then
-                    next_state <= SETUP;
+                    next_state <= S1;
                 else
-                    next_state <= COMPLETED;
+                    next_state <= S7;
                 end if;
         end case;   
     end process;
@@ -206,14 +206,14 @@ begin
         sel <= "00";
 
         case curr_state is
-            when RESET =>
+            when S0 =>
                 o_mem_en <= '0';
-            when SETUP =>
+            when S1 =>
                 init_addr <= '1';
                 init_word <= '1';
                 init_cred <= '1';
                 init_reg <= '1';
-            when WRITE_WORD =>
+            when S4 =>
                 if (unsigned(current_data) = 0) then
                     if (first_data_is_zero = '1') then
                         sel <= "00";
@@ -228,7 +228,7 @@ begin
                 end if;
                 o_mem_we <= '1';
                 en_addr_count <= '1';
-            when WRITE_CREDIBILITY =>
+            when S6 =>
                 if (first_data_is_zero = '1') then
                     sel <= "00";
                 else
@@ -237,7 +237,7 @@ begin
                 o_mem_we <= '1';
                 en_addr_count <= '1';
                 en_word_count <= '1';
-            when COMPLETED =>
+            when S7 =>
                 o_mem_en <= '0';
             when others =>
                 null;
@@ -245,7 +245,7 @@ begin
     end process;
 
     -- Collegamento dei segnali interni con le uscite fisiche del componente
-    multiplexer: process(sel)
+    multiplexer: process(sel, current_data, last_valid_data, credibility)
     begin
         case sel is
             when "00" =>
