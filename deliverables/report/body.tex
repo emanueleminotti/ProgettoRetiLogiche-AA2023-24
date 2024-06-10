@@ -36,12 +36,12 @@
 \subsection{Segnali interni}
   Di seguito una breve descrizione di tutti i segnali interni utilizzati per implementare le funzionalità del componente.
 \begin{itemize}
-  \item \textbf{{first\_data\_is\_zero}:} flag utilizzato per la gestione del caso particolare in cui il primo valore sia zero.
-  \item \textbf{{curr\_addr}:} memorizza l'indirizzo corrente al quale andremo a leggere/scrivere i dati in memoria.
+  \item \textbf{{first\_data\_is\_zero}:} flag utilizzato per la gestione del caso particolare in cui il primo valore è zero.
+  \item \textbf{{curr\_addr}:} memorizza l'indirizzo corrente al quale leggere/scrivere i dati in memoria.
   \item \textbf{{credibility}:} rappresenta il valore di credibilità corrente.
   \item \textbf{{word\_count}:} rappresenta il numero di parole lette dalla memoria.
   \item \textbf{{en\_addr\_count}:} abilita il modulo che si occupa di calcolare il corretto indirizzo di memoria.
-  \item \textbf{{en\_word\_count}:} abilita il modulo che fa da contatore di parole.
+  \item \textbf{{en\_word\_count}:} abilita il modulo contatore di parole.
   \item \textbf{{en\_cred\_count}:} abilita il modulo che si occupa di calcolare il valore di credibilità per la parola corrente.
   \item \textbf{{init\_addr}:} reinizializza il modulo Address counter.
   \item \textbf{{init\_word}:} reinizializza il modulo Word counter.
@@ -50,16 +50,10 @@
   \item \textbf{{sel}:} indica quale valore collegare all'uscita.
   \item \textbf{{last\_valid\_data}:} mantiene l'ultimo valore valido letto dalla memoria.
   \item \textbf{{current\_data}:} memorizza il valore corrente appena letto dalla memoria.
-  \item \textbf{{new\_data}:} indica che un nuovo valore valido è stato letto dalla memoria.
-  \item \textbf{{done\_processing}:} indica il termine della computazione.
+  \item \textbf{{new\_data}:} comunica che un nuovo valore valido è stato letto dalla memoria.
+  \item \textbf{{done\_processing}:} comunica il termine della computazione.
 \end{itemize}
 \subsection{Moduli}
-%\begin{figure}[!h]
-%  \includegraphics[width = 15cm]{images/schema_a_blocchi_componente.pdf}
-%  \caption{Schema a blocchi del componente}
-%\end{figure}
-% schema a blocchi componente
-% presentazione dei process
 \subsubsection{Address counter}
  Questo modulo calcola l'indirizzo della cella di memoria del dato da leggere/scrivere. Ad inizio computazione curr\_addr viene posto uguale a i\_add, successivamente viene incrementato di un'unità sul fronte di salita del clock se il segnale di en\_addr\_count è stato alzato. In presenza di un segnale di reset curr\_addr viene posto a 0.
 \subsubsection{Word counter}
