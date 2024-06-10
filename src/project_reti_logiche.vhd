@@ -22,54 +22,38 @@ end project_reti_logiche;
 
 architecture project_reti_logiche_arch of project_reti_logiche is
 
-   ---- SEGNALI ----
-
-   -- Controllo della macchina a stati finiti
    type state_type is (S0, S1, S2, S3, S4, S5, S6, S7);
    signal curr_state, next_state : state_type;
    
-   -- Gestione del caso particolare dato dalla specifica
    signal first_data_is_zero : std_logic := '1';
 
-   -- Memorizza l'indirizzo corrente al quale leggere/scrivere i dati in memoria
    signal curr_addr : std_logic_vector(15 downto 0) := (others => '0');
 
-   -- Valore di credibilità corrente
    signal credibility : std_logic_vector(4 downto 0) := (others => '1');
 
-   -- Numero di parole lette dalla memoria
    signal word_count : std_logic_vector(9 downto 0) := (others => '0');
    
-   -- Abilitano i contatori
    signal en_addr_count : std_logic := '0';
    signal en_word_count : std_logic := '0';
    signal en_cred_count : std_logic := '0';
 
-   -- Reinizializzano separatamente i componenti dell'entità 
    signal init_addr : std_logic := '0';
    signal init_word : std_logic := '0';
    signal init_cred : std_logic := '0';
    signal init_reg  : std_logic := '0';
 
-
-   -- Indica quale registro collegare all'uscita
    signal sel : std_logic_vector(1 downto 0) := "00";
 
-   -- Mantiene l'ultimo valore valido letto dalla memoria
    signal last_valid_data : std_logic_vector(7 downto 0) := (others => '0');
    signal current_data : std_logic_vector(7 downto 0) := (others => '0');
 
-   -- Indica che un nuovo valore valido è stato letto dalla memoria
    signal new_data: std_logic := '0';
 
-   -- Indica il termine della computazione
    signal done_processing : std_logic := '0';
    
 begin
 
-    ---- COMPONENTI ----
 
-    -- Conta a ritroso a partire dal valore di credibilità
     credibility_counter: process(i_rst, i_clk)
     begin
         if (i_rst = '1') then
@@ -83,7 +67,6 @@ begin
         end if;
     end process;
 
-    -- Calcola l'indirizzo della cella di memoria del dato da leggere/scrivere
     address_counter: process(i_rst, i_clk)
     begin
         if (i_rst = '1') then
@@ -97,7 +80,6 @@ begin
         end if;
     end process;
 
-    -- Conta fino al numero di parole K
     word_counter: process(i_rst, i_clk)
     begin
         if (i_rst = '1') then
@@ -118,8 +100,7 @@ begin
         end if;
     end process;
 
-    -- Mantiene l'ultimo valore valido letto da memoria
-    last_valid_data_reg: process(i_rst, i_clk)
+    data_reg: process(i_rst, i_clk)
     begin
         if (i_rst = '1') then
             current_data <= (others => '0');
@@ -140,7 +121,6 @@ begin
         end if;
     end process;
 
-    -- Registro della macchina a stati
     fsm_state_reg: process(i_rst, i_clk)
     begin
         if (i_rst = '1') then
@@ -150,7 +130,6 @@ begin
         end if;
     end process;
 
-    -- Funzione stato prossimo della macchina a stati
     fsm_lambda: process(i_rst, i_start, done_processing, curr_state)
     begin
         case curr_state is
@@ -189,10 +168,8 @@ begin
         end case;   
     end process;
 
-    -- Funzione di uscita della macchina a stati
     fsm_delta: process(curr_state, current_data, first_data_is_zero)
     begin
-        -- Inizializzazioni di default
         init_addr <= '0';
         init_word <= '0';
         init_cred <= '0';
@@ -244,7 +221,6 @@ begin
             end case;
     end process;
 
-    -- Collegamento dei segnali interni con le uscite fisiche del componente
     multiplexer: process(sel, current_data, last_valid_data, credibility)
     begin
         case sel is
