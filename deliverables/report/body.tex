@@ -55,11 +55,14 @@
 \end{itemize}
 \subsection{Moduli}
 \subsubsection{Address counter}
- Questo modulo calcola l'indirizzo della cella di memoria del dato da leggere/scrivere. Ad inizio computazione curr\_addr viene posto uguale a i\_add, successivamente viene incrementato di un'unità sul fronte di salita del clock se il segnale di en\_addr\_count è stato alzato. In presenza di un segnale di reset curr\_addr viene posto a 0.
+ Calcola l'indirizzo della cella di memoria del dato da leggere/scrivere.
+ Ad inizio computazione $curr\_addr$ viene posto uguale a $i\_add$, successivamente viene incrementato di un'unità sul fronte di salita del clock se il segnale di $en\_addr\_count$ è stato alzato, mentre in presenza di un segnale di reset $curr\_addr$ viene posto a $0$.
 \subsubsection{Word counter}
- Questo modulo conta fino al numero di parole K. Il conteggio parziale, inizialmente posto a 0, viene incrementato di un'unità ogni volta che viene letta una parola dalla memoria. Una volta raggiunto il valore K dato, il segnale di done\_processing viene portato a 1 in modo da portare a conclusione la computazione. In presenza di un segnale di reset sia word\_count che done\_processing vengono riportati a 0.
+ Conta fino al numero di parole K. 
+ Il conteggio parziale, inizialmente posto a $0$, viene incrementato di un'unità ogni volta che viene letta una parola dalla memoria. 
+ Una volta raggiunto il valore K dato, il segnale $done\_processing$ viene portato a $1$ in modo da concludere la computazione. In presenza di un segnale di reset sia $word\_count$ che $done\_processing$ vengono riportati a $0$.
 \subsubsection{Credibility counter}
- Questo modulo calcola il valore di credibilità che verrà scritto man mano nella memoria durante la computazione. Partendo dal valore 31 di default, esso rimane tale se viene letta una parola diversa da zero, mentre viene decrementato di un'unità (fino ad arrivare al massimo a 0) per ogni zero consecutivo che viene letto. In presenza di un segnale di reset, credibility torna al suo valore di default.
+ Calcola il valore di credibilità che verrà scritto man mano nella memoria durante la computazione. Partendo dal valore 31 di default, esso rimane tale se viene letta una parola diversa da zero, mentre viene decrementato di un'unità (fino ad arrivare al massimo a 0) per ogni zero consecutivo che viene letto. In presenza di un segnale di reset, credibility torna al suo valore di default.
 \subsubsection{Data register}
  Questo modulo aggiorna tutti i segnali associati alla lettura del dato corrente, in particolare ad ogni ciclo di clock (se non c'è stata reinizializzazione) current\_data viene posto uguale a i\_mem\_data, e se new\_data è uguale a 1 allore first\_data\_is\_zero viene mandato a zero e last\_valid\_data viene anch'esso posto uguale a i\_mem\_data.  
 \subsubsection{Multiplexer}

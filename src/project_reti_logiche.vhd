@@ -21,7 +21,6 @@ entity project_reti_logiche is
 end project_reti_logiche;
 
 architecture project_reti_logiche_arch of project_reti_logiche is
-
    type state_type is (S0, S1, S2, S3, S4, S5, S6, S7);
    signal curr_state, next_state : state_type;
    
@@ -52,8 +51,6 @@ architecture project_reti_logiche_arch of project_reti_logiche is
    signal done_processing : std_logic := '0';
    
 begin
-
-
     credibility_counter: process(i_rst, i_clk)
     begin
         if (i_rst = '1') then
@@ -238,5 +235,4 @@ begin
     end process;
     o_mem_addr <= curr_addr;
     o_done <= done_processing;
-
 end project_reti_logiche_arch;
