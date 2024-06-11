@@ -62,14 +62,22 @@
  Il conteggio parziale, inizialmente posto a $0$, viene incrementato di un'unità ogni volta che viene letta una parola dalla memoria. 
  Una volta raggiunto il valore K dato, il segnale $done\_processing$ viene portato a $1$ in modo da concludere la computazione. In presenza di un segnale di reset sia $word\_count$ che $done\_processing$ vengono riportati a $0$.
 \subsubsection{Credibility counter}
- Calcola il valore di credibilità che verrà scritto man mano nella memoria durante la computazione. Partendo dal valore 31 di default, esso rimane tale se viene letta una parola diversa da zero, mentre viene decrementato di un'unità (fino ad arrivare al massimo a 0) per ogni zero consecutivo che viene letto. In presenza di un segnale di reset, credibility torna al suo valore di default.
+ Calcola il valore di credibilità che verrà scritto man mano nella memoria durante la computazione. Partendo dal valore 31 di default, esso rimane tale se viene letta una parola diversa da zero, mentre viene decrementato di un'unità (fino ad arrivare al massimo a 0) per ogni zero consecutivo che viene letto. In presenza di un segnale di reset, $credibility$ torna al suo valore di default.
 \subsubsection{Data register}
- Questo modulo aggiorna tutti i segnali associati alla lettura del dato corrente, in particolare ad ogni ciclo di clock (se non c'è stata reinizializzazione) current\_data viene posto uguale a i\_mem\_data, e se new\_data è uguale a 1 allore first\_data\_is\_zero viene mandato a zero e last\_valid\_data viene anch'esso posto uguale a i\_mem\_data.  
+ Aggiorna tutti i segnali associati alla lettura del dato corrente, in particolare ad ogni ciclo di clock (se non c'è stata reinizializzazione) $current\_data$ viene posto uguale a $i\_mem\_data$, e se $new\_data$ è uguale a 1 allora $first\_data\_is\_zero$ viene mandato a zero e $last\_valid\_data$ viene anch'esso posto uguale a $i\_mem\_data$.  
 \subsubsection{Multiplexer}
- Questo modulo funziona come un multiplexer a tutti gli effetti, infatti in base al valore del segnale di selezione collega all'uscita (rappresentata da o\_mem\_data) il corrispondente dato da scrivere in memoria. 
+ Questo modulo funziona come un multiplexer a tutti gli effetti, infatti in base al valore del segnale di selezione collega all'uscita (rappresentata da $o\_mem\_data$) il corrispondente dato da scrivere in memoria. 
 \subsubsection{Macchina a stati}
-  \par L'ultimo componente del modulo progettato è la macchina a stati finiti, che ha il compito di gestire l'intero processo di elaborazione della sequenza in ingresso. La FSM coordina le operazioni degli altri componenti, assicurando che ogni fase dell'elaborazione avvenga nell'ordine corretto e nel momento opportuno.
+  \par L'ultimo modulo del componente progettato è la macchina a stati finiti, che ha il compito di gestire l'intero processo di elaborazione della sequenza in ingresso. La FSM coordina le operazioni degli altri moduli, assicurando che ogni fase dell'elaborazione avvenga nell'ordine corretto e nel momento opportuno.
   \par Di seguito vengono elencati gli stati della macchina con le relative uscite. Gli stati $S2$, $S3$ e $S5$ sono considerati stati \textit{idle} e non producono alcuna uscita. Tuttavia, si è rivelato necessario aggiungerli in fase di progettazione per garantire la corretta sincronizzazione dei moduli tra loro e con il clock.
+  \par \begin{itemize}
+    \item S0: rappresenta lo stato iniziale della FSM, viene eseguita la transizione verso S1 una volta che $i\_rst$ viene abbassato. 
+    \item S1: è uno stato di setup in cui avviene una reinizializzazione di tutti i moduli, in modo da poter cominciare una nuova computazione non appena il segnale $i\_start$ viene alzato.
+    \item S2: stato di attesa dell'arrivo di una nuova parola in un ciclo che scorre l'intera stringa. Una volta arrivati al termine, dopo che viene alzato il segnale di $done\_processing$ avviene una transizione verso lo stato S7. 
+    \item S4: in questo stato avviene la gestione dei vari segnali in base al valore letto dalla memoria. Se il valore ricevuto è il primo della stringa ed è uno zero, il segnale di selezione viene cambiato in modo da portare all'uscita un valore nullo, se invece si tratta di uno zero in mezzo alla sequenza viene alzato il segnale per attivare il Credibility Counter e la selezione viene modificata in modo da portare all'uscita l'ultimo valore valido letto (contenuto in $last\_valid\_data$). Se invece il valore letto è diverso da zero viene reinizializzato il Credibility counter, viene alzato il segnale di $new\_data$ e la selezione modificata in modo da portare all'uscita il dato corrente. Infine, indipendetemente dal valore letto, viene abilitata la scrittura in memoria e attivato l'Address counter.
+    \item S6: stato che serve a modificare la selezione per la scrittura della credibilità (verrà scritto 0 se ancora non è mai stato letto un valore non nullo, altrimenti verrà scritto il valore contenuto in $Credibility$). Vengono anche alzati i segnali per l'abilitazione della scrittura e dei moduli Address counter e Word counter.
+    \item S7: ulteriore stato di attesa che aspetta che il segnale $i\_start$ venga abbassato in modo da poter tornare allo stato di setup S1.
+  \end{itemize}
   \begin{figure}[H]
   \includegraphics[width = .8\textwidth, center]{images/fsm_diagram.pdf}
   \caption{Macchina a stati finiti}
@@ -94,7 +102,7 @@
     +-------------------------+------+-------+------------+-----------+-------+    
 \end{verbatim}
 \par Solo una minima parte delle \textit{Lookup Table} e dei registri disponibili sulla scheda $Artix-7 FPGA xc7a200tfbg484-1$ utilizzata in fase di sintesi è stata necessaria per implementare il componente progettato.
-\par Inoltre, nessuno dei registri utilizzati è del tipo \textit{Flip-Flop}, condizione necessaria a garantire l'assenza di ritardi di propagazione indesiderati.
+\par Inoltre, nessuno dei registri utilizzati è del tipo \textit{Latch}, condizione necessaria a garantire l'assenza di ritardi di propagazione indesiderati.
 \subsubsection{Report timing}
 \begin{verbatim}
 Slack (MET) :       17.369ns  (required time - arrival time)
