@@ -9,21 +9,21 @@ entity project_reti_logiche is
          i_start : in std_logic;
          i_add   : in std_logic_vector(15 downto 0);
          i_k     : in std_logic_vector(9 downto 0);
-         
+
          o_done : out std_logic;
-         
+
          o_mem_addr : out std_logic_vector(15 downto 0);
          i_mem_data : in std_logic_vector(7 downto 0);
          o_mem_data : out std_logic_vector(7 downto 0);
          o_mem_we   : out std_logic;
          o_mem_en   : out std_logic
-     );       
+     );
 end project_reti_logiche;
 
 architecture project_reti_logiche_arch of project_reti_logiche is
    type state_type is (S0, S1, S2, S3, S4, S5, S6, S7);
    signal curr_state, next_state : state_type;
-   
+
    signal first_data_is_zero : std_logic := '1';
 
    signal curr_addr : std_logic_vector(15 downto 0) := (others => '0');
@@ -31,7 +31,7 @@ architecture project_reti_logiche_arch of project_reti_logiche is
    signal credibility : std_logic_vector(4 downto 0) := (others => '1');
 
    signal word_count : std_logic_vector(9 downto 0) := (others => '0');
-   
+
    signal en_addr_count : std_logic := '0';
    signal en_word_count : std_logic := '0';
    signal en_cred_count : std_logic := '0';
@@ -48,7 +48,7 @@ architecture project_reti_logiche_arch of project_reti_logiche is
    signal new_data: std_logic := '0';
 
    signal done_processing : std_logic := '0';
-   
+
 begin
     credibility_counter: process(i_rst, i_clk)
     begin
@@ -161,7 +161,7 @@ begin
                 else
                     next_state <= S7;
                 end if;
-        end case;   
+        end case;
     end process;
 
     fsm_delta: process(curr_state, current_data, first_data_is_zero)
@@ -232,7 +232,7 @@ begin
                 o_mem_data <= (others => '0');
         end case;
     end process;
-  
+
     o_mem_addr <= curr_addr;
     o_done <= done_processing;
 end project_reti_logiche_arch;

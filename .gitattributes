@@ -1,0 +1,22 @@
+# Normalize all text files to LF in the repository and in the working tree.
+# Without this, the same sources committed from Windows (Vivado) and Linux (GHDL)
+# show up as fully rewritten files in every diff.
+* text=auto eol=lf
+
+# Hardware description and build sources
+*.vhd    text eol=lf
+*.vhdl   text eol=lf
+*.tcl    text eol=lf
+*.xdc    text eol=lf
+Makefile text eol=lf
+
+# Documentation sources
+*.tex     text eol=lf
+*.md      text eol=lf
+*.drawio  text eol=lf
+
+# Binary assets: never touch, and don't try to diff them
+*.pdf binary
+*.png binary
+*.jpg binary
+*.ghw binary
