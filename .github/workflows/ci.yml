@@ -1,0 +1,27 @@
+name: simulation
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ghdl:
+    name: GHDL regression suite
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up GHDL
+        uses: ghdl/setup-ghdl@v1
+        with:
+          version: '5.1.1'
+          backend: mcode
+
+      - name: Check syntax
+        run: make syntax
+
+      - name: Run the testbench suite
+        run: make test
